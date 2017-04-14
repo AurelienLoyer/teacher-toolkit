@@ -1,0 +1,17 @@
+{
+  "name": "teacher_toolkit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "express": "^4.14.0",
+    "socket.io": "^1.7.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "dev": "node app.js && cd front && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Aurélien Loyer",
+  "license": "ISC"
+}

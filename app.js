@@ -85,11 +85,9 @@ fs.watch(filePath, () => {
 
 //Partie communication temps réél !
 io.on('connection', function (socket) {
-
   socket.emit('files', files);
-
-  fs.watch(filePath, () => {
-    socket.emit('files', files);
-  })
-
 });
+
+fs.watch(filePath, () => {
+  io.emit('files', files);
+})

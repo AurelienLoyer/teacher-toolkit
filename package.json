@@ -9,8 +9,9 @@
   },
   "devDependencies": {},
   "scripts": {
-    "dev": "node app.js && cd front && npm run dev",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node app.js | cd front && npm run dev",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "expose": "node app.js | ngrok http 1337"
   },
   "author": "Aurélien Loyer",
   "license": "ISC"

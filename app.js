@@ -58,9 +58,9 @@ app.get('/files/:name', function (req, res) {
     'content-disposition':'attachment; filename=' + filename
   });
 
-  console.log('+1 DL de '+filename);
+  console.log('+1 DL de '+filename)
 
-  const readStream = fs.createReadStream(fullPath);
+  const readStream = fs.createReadStream(fullPath)
   readStream.pipe(res)
 
 });
@@ -82,8 +82,7 @@ fs.watch(filePath, () => {
   console.log(files);
 });
 
-
-//Partie communication temps réél !
+//Partie communication temps réél :° !
 io.on('connection', function (socket) {
   socket.emit('files', files);
 });

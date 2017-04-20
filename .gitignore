@@ -2,4 +2,7 @@
 node_modules/
 npm-debug.log
 yarn-error.log
-files/
+
+files/*
+config/config.prod.js
+config/config.dev.js

@@ -1,6 +1,0 @@
-.DS_Store
-node_modules/
-npm-debug.log
-yarn-error.log
-config/config.prod.js
-config/config.dev.js

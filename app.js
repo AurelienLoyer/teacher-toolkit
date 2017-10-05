@@ -34,7 +34,7 @@ server.listen(3000);
 let files = fs.readdirSync(filePath);
 
 //recuperation des paremetres de lancement
-const formation = process.argv[2] || 'Formation Node.js / VueJs';
+const formation = process.argv[2] || 'Formation TypeScript';
 const who = process.argv[3] || 'Aurélien Loyer';
 const teacher = process.argv[4] || 'aurelien.loyer@zenika.com';
 

@@ -6,13 +6,15 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const fs = require('fs')
 const path = require('path')
+const readlineSync = require('readline-sync');
+const ngrok = require('ngrok');
 
 const port = config.PORT
-const filePath = 'files';
+const filePath = 'files'
 const base_uri = config.BASE_URI
 
-server.listen(port);
-console.log('Server Run / Mode '+env+' / Port '+port);
+server.listen(port)
+console.log('Server Run / Mode '+env+' / Port '+port)
 
 app.use(express.static('front'));
 
@@ -25,7 +27,6 @@ app.all('*', function(req, res, next) {
 app.get('/', function(req, res,next) {
   res.sendfile(__dirname +'/front'+ '/index.html');
   app.use(express.static(__dirname + '/front'));
-  //app.use('/front/',express.static(__dirname + './front'))
 });
 
 server.listen(3000);
@@ -34,9 +35,21 @@ server.listen(3000);
 let files = fs.readdirSync(filePath);
 
 //recuperation des paremetres de lancement
-const formation = process.argv[2] || 'Formation TypeScript';
-const who = process.argv[3] || 'Aurélien Loyer';
-const teacher = process.argv[4] || 'aurelien.loyer@zenika.com';
+
+const formation = readlineSync.question('Qu\'elle est votre formation (Node.js) ?  ') || 'Node.js';
+const who = readlineSync.question('Qu\'elle est votre nom (Aurélien Loyer) ?  ') || 'Aurélien Loyer';
+const teacher = readlineSync.question('Qu\'elle est votre email (aurelien.loyer@zenika.com) ?  ') || 'aurelien.loyer@zenika.com';
+const twitter_url = readlineSync.question('Votre Twitter ?  ');
+const github_url = readlineSync.question('Votre GitHub ?  ');
+
+if(process.argv[2] === 'ngrok'){
+  ngrok.connect({
+    proto: 'http',
+    addr: port,
+  }, function (err, url) {
+    console.log(`Interface accessible depuis : ${url}`)
+  });
+}
 
 app.get('/infos', function (req, res) {
   res.json({

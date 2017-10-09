@@ -6,15 +6,15 @@ const server = require('http').createServer(app)
 const io = require('socket.io')(server)
 const fs = require('fs')
 const path = require('path')
-const readlineSync = require('readline-sync');
-const ngrok = require('ngrok');
+const readlineSync = require('readline-sync')
+const ngrok = require('ngrok')
 
 const port = config.PORT
 const filePath = 'files'
 const base_uri = config.BASE_URI
 
 server.listen(port)
-console.log('Server Run / Mode '+env+' / Port '+port)
+console.log(`Server Run / Mode ${env} / Port ${port}`)
 
 app.use(express.static('front'));
 
@@ -25,29 +25,36 @@ app.all('*', function(req, res, next) {
 });
 
 app.get('/', function(req, res,next) {
-  res.sendfile(__dirname +'/front'+ '/index.html');
-  app.use(express.static(__dirname + '/front'));
+  res.sendfile(`${__dirname}/front/index.html`);
+  app.use(express.static(`${__dirname}/front`));
 });
 
 server.listen(3000);
 
-//Lire les fichiers d'un dossier
+// Get files to share
 let files = fs.readdirSync(filePath);
 
-//recuperation des paremetres de lancement
-
+// Get start parameter
 const formation = readlineSync.question('Qu\'elle est votre formation (Node.js) ?  ') || 'Node.js';
 const who = readlineSync.question('Qu\'elle est votre nom (Aurélien Loyer) ?  ') || 'Aurélien Loyer';
 const teacher = readlineSync.question('Qu\'elle est votre email (aurelien.loyer@zenika.com) ?  ') || 'aurelien.loyer@zenika.com';
 const twitter_url = readlineSync.question('Votre Twitter ?  ');
 const github_url = readlineSync.question('Votre GitHub ?  ');
 
-if(process.argv[2] === 'ngrok'){
+// If run expose launch ngrok
+if (process.argv[2] === 'ngrok') {
   ngrok.connect({
-    proto: 'http',
+    proto: config.ngrok_proto,
+    auth: config.ngrok_auth,
+    subdomain: config.ngrok_subdomain,
     addr: port,
   }, function (err, url) {
-    console.log(`Interface accessible depuis : ${url}`)
+    if (!err)
+      console.log(`Interface accessible depuis : ${url}`)
+    else {
+      console.log(err)
+      exit()
+    }
   });
 }
 
@@ -71,7 +78,8 @@ app.get('/files/:name', function (req, res) {
     'content-disposition':'attachment; filename=' + filename
   });
 
-  console.log('+1 DL de '+filename)
+  // TODO add front animation :)
+  console.log(`+1 DL de ${filename}`)
 
   const readStream = fs.createReadStream(fullPath)
   readStream.pipe(res)
@@ -95,7 +103,7 @@ fs.watch(filePath, () => {
   console.log(files);
 });
 
-//Partie communication temps réél :° !
+// Side live connexion :° !
 io.on('connection', function (socket) {
   socket.emit('files', files);
 });

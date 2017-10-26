@@ -5,10 +5,16 @@
   "main": "app.js",
   "dependencies": {
     "express": "^4.14.0",
+    "files": "^0.8.2",
+    "ngrok": "^2.2.23",
     "socket.io": "^1.7.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "readline-sync": "^1.4.7"
+  },
   "scripts": {
+    "postinstall": "cd front && npm install",
+    "start": "npm run dev",
     "dev": "node app.js | cd front && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "expose": "node app.js ngrok"

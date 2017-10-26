@@ -32,6 +32,9 @@ app.get('/', function(req, res,next) {
 server.listen(3000);
 
 // Get files to share
+if (!fs.existsSync(filePath)){
+  fs.mkdirSync(filePath);
+}
 let files = fs.readdirSync(filePath);
 
 // Get start parameter
@@ -100,7 +103,6 @@ app.get('/files', function (req, res) {
 
 fs.watch(filePath, () => {
   files = fs.readdirSync(filePath);
-  console.log(files);
 });
 
 // Side live connexion :° !

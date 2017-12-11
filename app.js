@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
-const config = require('./config/config.'+env+'.js')
+const config = require('./config/config.js')
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
@@ -63,11 +63,11 @@ if (process.argv && process.argv[2] === 'ngrok') {
 
 app.get('/infos', function (req, res) {
   res.json({
-      who: who,
-      formation: formation,
-      email: email,
-      twiiter: twitter,
-      twiiter: github,
+      who,
+      formation,
+      email,
+      twitter,
+      github,
   });
 });
 
@@ -84,10 +84,11 @@ app.get('/files/:name', function (req, res) {
   });
 
   // TODO add front animation :)
-  console.log(`+1 DL de ${filename}`)
+  console.log(`+1 DL de ${filename}`);
+  socket.emit('download', filename);
 
-  const readStream = fs.createReadStream(fullPath)
-  readStream.pipe(res)
+  const readStream = fs.createReadStream(fullPath);
+  readStream.pipe(res);
 
 });
 

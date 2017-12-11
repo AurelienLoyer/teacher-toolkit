@@ -4,5 +4,3 @@ npm-debug.log
 yarn-error.log
 
 files/*
-config/config.prod.js
-config/config.dev.js

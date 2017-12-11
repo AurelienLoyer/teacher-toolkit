@@ -1,5 +1,14 @@
-# teacher_toolkit
+# Teacher Toolkit
 
-Simple file share using Node.js / Vue / Ngrok :+1:
+Simple files/links share using Node.js / VueJS / Ngrok :+1:
 
-![screen](screen/screen_1.png)
+## How to use
+
+- Edit config.js file
+- npm run expose
+- Drop files into files directory
+- Enjoy :)
+
+## Preview
+
+![screen](screen/screen_2.png)

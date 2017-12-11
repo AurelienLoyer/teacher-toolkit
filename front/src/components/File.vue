@@ -1,7 +1,7 @@
 <template lang="html">
     <a class="file" :href="env.api +'/files/'+file">
-      <img :src="getIconByType(file)" alt="">
-      <span>{{file}}</span>
+      <img :src="getFileIcon(file)" alt="">
+      <span :title="file">{{file}}</span>
     </a>
 </template>
 
@@ -24,8 +24,9 @@ export default {
   created(){
   },
   methods:{
-    getIconByType(type){
-      return 'src/assets/icons/archive.png'
+    getFileIcon(filename){
+      const ext = filename.substr(filename.lastIndexOf('.') + 1)
+      return `src/assets/icons/${ext}.png`
     }
   }
 }
@@ -36,6 +37,11 @@ export default {
 .file{
   text-decoration: none;
   padding: 10px;
+  text-align: center;
+  width: 200px;
+  overflow: hidden;
+  display: block;
+  
   &:hover{
     img{
       transform: scale(0.9);
@@ -48,12 +54,16 @@ export default {
     transition: all 0.2s;
     height: 100px;
     display: block;
+    margin: auto;
   }
   span{
     transition: all 0.2s;
     padding: 10px;
     display: block;
     font-weight: bold;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }
 

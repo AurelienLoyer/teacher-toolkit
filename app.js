@@ -38,14 +38,14 @@ if (!fs.existsSync(filePath)){
 let files = fs.readdirSync(filePath);
 
 // Get start parameter
-const formation = readlineSync.question('Qu\'elle est votre formation (Node.js) ?  ') || 'Node.js';
+const formation = readlineSync.question('Qu\'elle est votre formation (Angular) ?  ') || 'Angular';
 const who = readlineSync.question('Qu\'elle est votre nom (Aurélien Loyer) ?  ') || 'Aurélien Loyer';
-const teacher = readlineSync.question('Qu\'elle est votre email (aurelien.loyer@zenika.com) ?  ') || 'aurelien.loyer@zenika.com';
-const twitter_url = readlineSync.question('Votre Twitter ?  ');
-const github_url = readlineSync.question('Votre GitHub ?  ');
+const email = readlineSync.question('Qu\'elle est votre email (aurelien.loyer@zenika.com) ?  ') || 'aurelien.loyer@zenika.com';
+const twitter = readlineSync.question('Votre Twitter ? (@AurelienLoyer) ') || '@AurelienLoyer';
+const github = readlineSync.question('Votre GitHub ? (T3kstiil3) ') || 'T3kstiil3';
 
 // If run expose launch ngrok
-if (process.argv[2] === 'ngrok') {
+if (process.argv && process.argv[2] === 'ngrok') {
   ngrok.connect({
     proto: config.ngrok_proto,
     auth: config.ngrok_auth,
@@ -65,7 +65,9 @@ app.get('/infos', function (req, res) {
   res.json({
       who: who,
       formation: formation,
-      teacher: teacher
+      email: email,
+      twiiter: twitter,
+      twiiter: github,
   });
 });
 

@@ -1,12 +1,13 @@
 <template lang="html">
   <div class="session">
     <h1>{{infos.formation}}</h1>
+    <router-link class="button" to="admin">Top Secret</router-link>
     <h2>
       <i class="fa fa-link" aria-hidden="true"></i>
       {{url}}
     </h2>
     <div class="teacher">
-      <div class="avatar" style="background-image:url('src/assets/avatar.jpg')"></div>
+      <div class="avatar" style="background-image:url('src/assets/avatar.jpg'); display:none;"></div>
       <h2 class="infos">
         {{infos.who}}
         <br>
@@ -20,9 +21,9 @@
           </a>
         </li>
         <li v-if="infos.twitter">
-            <a :href="`https://twitter.com/${infos.twitter}`">
-              <i class="fa fa-twitter" aria-hidden="true"></i>
-              {{infos.twitter}}
+          <a :href="`https://twitter.com/${infos.twitter}`">
+            <i class="fa fa-twitter" aria-hidden="true"></i>
+            {{infos.twitter}}
           </a>
         </li>
       </ul>
@@ -66,6 +67,22 @@
       padding: 10px;
     }
 
+    .button {
+      position: absolute;
+      background: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px;
+      top: 14px;
+      font-size: 12px;
+      border-left: solid 30px #42b983;
+      transition: all 0.2s;
+      right: -80px;
+      &:hover{
+        right: 0px;
+      }
+    }
+
     .avatar {
       border-radius: 50%;
       height: 100px;
@@ -75,12 +92,12 @@
       background-position: center;
     }
 
-    .social{
-      a{
+    .social {
+      a {
         text-decoration: none;
         display: flex;
         align-items: center;
-        i{
+        i {
           font-size: 2em;
           margin-right: 5px;
         }

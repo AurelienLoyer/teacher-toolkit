@@ -5,6 +5,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {path: '/', component: require('./components/Home.vue')},
+  {path: '/admin', component: require('./components/Admin.vue')},
 ]
 
 const router = new VueRouter({

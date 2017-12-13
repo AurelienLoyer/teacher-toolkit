@@ -1,48 +1,30 @@
-const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev'
-const config = require('./config/config.js')
-const express = require('express')
-const app = express()
-const server = require('http').createServer(app)
-const io = require('socket.io')(server)
-const fs = require('fs')
-const path = require('path')
-const readlineSync = require('readline-sync')
-const ngrok = require('ngrok')
+const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
+const config = require('./config/config.js');
+const express = require('express');
+const app = express();
+const bodyParser = require('body-parser')
+const cors = require('cors')
+const server = require('http').createServer(app);
+const io = require('socket.io')(server);
+const fs = require('fs');
+const path = require('path');
+const readlineSync = require('readline-sync');
+const ngrok = require('ngrok');
+const utils = require('./utils.js');
 
-const port = config.PORT
-const filePath = 'files'
-const base_uri = config.BASE_URI
-
-server.listen(port)
-console.log(`Server Run / Mode ${env} / Port ${port}`)
-
-app.use(express.static('front'));
-
-app.all('*', function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
-
-app.get('/', function(req, res,next) {
-  res.sendfile(`${__dirname}/front/index.html`);
-  app.use(express.static(`${__dirname}/front`));
-});
-
-server.listen(3000);
-
-// Get files to share
-if (!fs.existsSync(filePath)){
-  fs.mkdirSync(filePath);
-}
-let files = fs.readdirSync(filePath);
+const port = config.port;
+const filePath = config.file_path;
 
 // Get start parameter
-const formation = readlineSync.question('Qu\'elle est votre formation (Angular) ?  ') || 'Angular';
-const who = readlineSync.question('Qu\'elle est votre nom (Aurélien Loyer) ?  ') || 'Aurélien Loyer';
-const email = readlineSync.question('Qu\'elle est votre email (aurelien.loyer@zenika.com) ?  ') || 'aurelien.loyer@zenika.com';
-const twitter = readlineSync.question('Votre Twitter ? (@AurelienLoyer) ') || '@AurelienLoyer';
-const github = readlineSync.question('Votre GitHub ? (T3kstiil3) ') || 'T3kstiil3';
+const formation = readlineSync.question('Qu\'elle est votre formation (Angular) ?  ') ||  'Angular';
+const who = readlineSync.question('Qu\'elle est votre nom (Aurélien Loyer) ?  ') ||  'Aurélien Loyer';
+const email = readlineSync.question(`Qu'elle est votre email (aurelien.loyer@zenika.com) ?  `) ||  'aurelien.loyer@zenika.com';
+const password = readlineSync.question(`Votre mot de passe pour la page admin (${config.admin_password}) ?  `) ||  config.admin_password;
+const twitter = readlineSync.question('Votre Twitter ?  ') || config.default_twitter;
+const github = readlineSync.question('Votre GitHub ?  ') || config.default_github;
+
+server.listen(port);
+console.log(`Server Run / Mode ${env} / Port ${port} 🎄`);
 
 // If run expose launch ngrok
 if (process.argv && process.argv[2] === 'ngrok') {
@@ -61,31 +43,67 @@ if (process.argv && process.argv[2] === 'ngrok') {
   });
 }
 
+app.use(express.static('front'));
+app.use(bodyParser.json());
+app.use(cors());
+
+app.all('*', function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
+app.get('/', function (req, res, next) {
+  res.sendfile(`${__dirname}/front/index.html`);
+  app.use(express.static(`${__dirname}/front`));
+});
+
+// Get items to share
+if (!fs.existsSync(filePath)) {
+  fs.mkdirSync(filePath);
+}
+if (!fs.existsSync(config.links_file)) {
+  fs.writeFileSync(config.links_file, JSON.stringify([]));
+}
+
+let files = fs.readdirSync(filePath).filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+let links = JSON.parse(fs.readFileSync(config.links_file, 'utf8'));
+
+let totalDownload = {};
+
 app.get('/infos', function (req, res) {
   res.json({
-      who,
-      formation,
-      email,
-      twitter,
-      github,
+    who,
+    formation,
+    email,
+    twitter,
+    github,
   });
 });
 
 app.get('/files/:name', function (req, res) {
   let filename = req.params.name;
 
-  let fullPath = path.join(__dirname+'/'+filePath, filename);
+  let fullPath = path.join(__dirname + '/' + filePath, filename);
   let stat = fs.statSync(fullPath);
 
   res.writeHead(200, {
     'content-type': 'application/zip',
     'content-length': stat.size,
-    'content-disposition':'attachment; filename=' + filename
+    'content-disposition': 'attachment; filename=' + filename
   });
 
   // TODO add front animation :)
   console.log(`+1 DL de ${filename}`);
-  socket.emit('download', filename);
+  io.emit('download', filename);
+
+  if (totalDownload[filename])  {
+    totalDownload[filename] = totalDownload[filename] + 1
+  }
+  else {
+    totalDownload[filename] = 1
+  }
+  io.emit('totalDownload', totalDownload);
 
   const readStream = fs.createReadStream(fullPath);
   readStream.pipe(res);
@@ -93,26 +111,30 @@ app.get('/files/:name', function (req, res) {
 });
 
 app.get('/files', function (req, res) {
-  formatedList  = files.map(file => {
-    let fullPath = path.join(__dirname+'/'+filePath, file);
-    let stat = fs.statSync(fullPath);
-    return {
-      filename : file,
-      stat : stat
-    }
-  })
-  res.json(formatedList);
+  res.json(files);
+});
+app.get('/links', function (req, res) {
+  res.json(links);
+});
+
+app.post('/links', function (req, res) {
+  fs.writeFileSync(config.links_file, JSON.stringify(req.body));
+  res.json(links);
 });
 
 fs.watch(filePath, () => {
-  files = fs.readdirSync(filePath);
-});
-
-// Side live connexion :° !
-io.on('connection', function (socket) {
-  socket.emit('files', files);
-});
-
-fs.watch(filePath, () => {
+  files = fs.readdirSync(filePath)
+    .filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
   io.emit('files', files);
-})
+});
+fs.watch(config.links_file, () => {
+  let data = fs.readFileSync(config.links_file, 'utf8');
+  if(utils.isValidJsonString(data)){
+    links = JSON.parse(data);
+    io.emit('links', links);
+  } 
+});
+
+io.on('connection', function (socket) {
+  // do somethink on connection ?
+});

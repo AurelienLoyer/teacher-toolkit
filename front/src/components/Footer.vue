@@ -40,7 +40,7 @@
         &:hover{
             i{
                 transform: scale(1.1);
-                color: red
+                color: black;
             }
         }
     }

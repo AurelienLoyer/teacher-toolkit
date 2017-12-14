@@ -1,7 +1,14 @@
 <template lang="html">
   <div class="links">
     <h2>Links</h2>
-    <img v-if="isLoading" class="loader" src="https://cdn.dribbble.com/users/215249/screenshots/2575539/octo-loader.gif" alt="">
+    <div v-if="isLoading">
+      <img class="img_state" src="src/assets/loader.gif" alt="">
+      <strong>Loading links...</strong>
+    </div>
+    <div v-else-if="isError">
+        <img class="img_state" src="src/assets/error.png" alt=""><br>
+        <strong>Server error :'(</strong>
+    </div> 
     <ul v-else>
       <li v-for="link in links" v-if="link">
         <a target="_blank" :href="link">
@@ -21,6 +28,7 @@
     data() {
       return {
         isLoading: true,
+        isError: false,
         links: [],
       }
     },
@@ -30,6 +38,10 @@
         .then(data => {
           this.links = data
           this.isLoading = false
+        })
+        .catch(() => {
+          this.isLoading = false;
+          this.isError = true;
         })
     },
     sockets: {
@@ -71,8 +83,8 @@
     color: white;
   }
 
-  .loader {
-      height: 100px;
-      margin-top: 20px;
-    }
+  .img_state {
+    height: 100px;
+    margin-top: 20px;
+  }
 </style>

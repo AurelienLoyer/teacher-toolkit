@@ -3,6 +3,9 @@ module.exports = {
   file_path: 'files',
   links_file: 'links.json',
 
+  default_formation: 'VueJs',
+  default_who: 'Aurélien Loyer',
+  default_email: 'aurelien.loyer@zenika.com',
   default_twitter: '@AurelienLoyer',
   default_github: 'T3kstiil3',
 

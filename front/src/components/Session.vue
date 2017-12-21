@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="session">
     <h1>{{infos.formation}}</h1>
-    <router-link class="button" to="admin">Top Secret</router-link>
+    <router-link v-if="!isError" class="button" to="admin">Top Secret</router-link>
     <h2>
       <i class="fa fa-link" aria-hidden="true"></i>
       {{url}}
@@ -41,14 +41,20 @@
       return {
         infos: {},
         url: window.location.origin,
+        isError: false,
       }
     },
     components: {
     },
     created() {
-      this.$http.get(env.api + '/infos').then(response => {
-        this.infos = response.body
-      })
+      this.$http.get(env.api + '/infos')
+        .then(response => {
+          this.infos = response.body
+          this.isError = false
+        })
+        .catch(() => {
+          this.isError = true
+        })
     },
     methods: {
     },

@@ -1,6 +1,11 @@
 <template lang="html">
     <div class="admin">
-        <header>Top Secret Panel</header>
+        <header>
+            <router-link to="/" class="back-btn">
+                BACK
+            </router-link>
+            Top Secret Panel
+        </header>
 
         <div class="links-form">
             <h2>Add links</h2>
@@ -38,13 +43,22 @@
         data() {
             return {
                 links: [],
-                autoSave: localStorage.getItem('autoSave') || 'off',
+                autoSave: localStorage.getItem('autoSave') ||  'off',
+                password: localStorage.getItem('password'),
             }
         },
         mounted() {
-            fetch(`${env.api}/links`)
-                .then(resp => resp.json())
-                .then(data => this.links = data)
+            if (!this.password) {
+                this.$router.push('login')
+            }
+            else {
+                fetch(`${env.api}/links?password=${this.password}`)
+                    .then(resp => resp.json())
+                    .then(data => this.links = data)
+                    .catch(e => {
+                        console.log(e)
+                    })
+            }
         },
         sockets: {
             links: function (links) {
@@ -59,22 +73,29 @@
                 this.links.splice(index, 1)
             },
             changeSaveMode() {
-                if (this.autoSave === 'on')  {
+                if (this.autoSave === 'on') {
                     this.autoSave = 'off'
                 }
                 else {
                     this.autoSave = 'on'
                 }
-                localStorage.setItem('autoSave',this.autoSave)
+                localStorage.setItem('autoSave', this.autoSave)
             },
             saveAll() {
-                this.$http.post(`${env.api}/links`,this.links)
+                this.$http.post(`${env.api}/links?password=${this.password}`, this.links)
+                    .catch(e => {
+                        if (e.status === 401) {
+                            console.log('💩')
+                            localStorage.removeItem('password')
+                            this.$router.push('login')
+                        }
+                    })
             },
         },
         watch: {
             links() {
                 if (this.autoSave === 'on') {
-                    this.$http.post(`${env.api}/links`,this.links)
+                    this.saveAll()
                 }
             },
         },
@@ -90,6 +111,14 @@
         margin: 0px;
         padding: 10px;
         text-transform: uppercase;
+
+        .back-btn {
+            color: black;
+            float: left;
+            background: #1aa263;
+            padding: 1px 10px;
+            text-decoration: none;
+        }
     }
 
     label {
@@ -107,7 +136,7 @@
             border: 2px solid;
             overflow: hidden;
             max-width: 90%;
-            &.addLine{
+            &.addLine {
                 text-align: center;
                 border: none;
                 justify-content: center;
@@ -156,7 +185,7 @@
         }
     }
 
-    .saveAll{
+    .saveAll {
         width: 500px;
         max-width: 90%;
     }

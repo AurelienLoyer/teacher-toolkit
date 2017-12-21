@@ -1,14 +1,11 @@
 <template lang="html">
   <div class="links">
     <h2>Links</h2>
-    <div v-if="isLoading">
-      <img class="img_state" src="src/assets/loader.gif" alt="">
-      <strong>Loading links...</strong>
-    </div>
-    <div v-else-if="isError">
-        <img class="img_state" src="src/assets/error.png" alt=""><br>
-        <strong>Server error :'(</strong>
-    </div> 
+
+    <v-loader :type="'links'" v-if="isLoading"></v-loader>
+
+    <v-error v-else-if="isError"></v-error>
+
     <ul v-else>
       <li v-for="link in links" v-if="link">
         <a target="_blank" :href="link">
@@ -17,11 +14,15 @@
         </a>
       </li>
     </ul>
+
   </div>
 </template>
 
 <script>
+
   import env from 'env'
+  import Loader from './Loader.vue'
+  import Error from './Error.vue'
 
   export default {
     name: 'links',
@@ -31,6 +32,10 @@
         isError: false,
         links: [],
       }
+    },
+    components: {
+      'v-loader': Loader,
+      'v-error': Error,
     },
     mounted() {
       fetch(`${env.api}/links`)
@@ -70,7 +75,7 @@
           font-size: 3em;
           transition: all 0.2s;
         }
-        &:hover i{
+        &:hover i {
           transform: scale(0.9)
         }
       }

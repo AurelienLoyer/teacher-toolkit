@@ -20,8 +20,8 @@ const formation = readlineSync.question(`Qu'elle est votre formation (${config.d
 const who = readlineSync.question(`Qu'elle est votre nom (${config.default_who}) ?  `) ||  config.default_who;
 const email = readlineSync.question(`Qu'elle est votre email (${config.default_email}) ?  `) ||  config.default_email;
 const password = readlineSync.question(`Votre mot de passe pour la page admin (${config.admin_password}) ?  `) ||  config.admin_password;
-const twitter = readlineSync.question('Votre Twitter ?  ') || config.default_twitter;
-const github = readlineSync.question('Votre GitHub ?  ') || config.default_github;
+const twitter = readlineSync.question(`Votre Twitter ? (${config.default_twitter}) `) || config.default_twitter;
+const github = readlineSync.question(`Votre GitHub ? (${config.default_github}) `) || config.default_github;
 
 server.listen(port);
 console.log(`Server Run / Mode ${env} / Port ${port} 🎄`);
@@ -113,13 +113,30 @@ app.get('/files/:name', function (req, res) {
 app.get('/files', function (req, res) {
   res.json(files);
 });
+
 app.get('/links', function (req, res) {
   res.json(links);
 });
 
 app.post('/links', function (req, res) {
-  fs.writeFileSync(config.links_file, JSON.stringify(req.body));
-  res.json(links);
+  if (req.query.password === password){
+    fs.writeFileSync(config.links_file, JSON.stringify(req.body));
+    res.json(links);
+  }
+  else { 
+    res.sendStatus(401);
+  }
+});
+
+// ADMIN routes
+
+app.post('/password', function (req, res) {
+  if (req.body.password === password){
+    res.sendStatus(200);
+  }
+  else { 
+    res.sendStatus(401);
+  }
 });
 
 fs.watch(filePath, () => {

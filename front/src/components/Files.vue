@@ -1,29 +1,33 @@
 <template lang="html">
   <div class="files">
     <h2>Files</h2>
-    <div v-if="isLoading">
-      <img class="img_state" src="src/assets/loader.gif" alt=""><br>
-      <strong>Loading files...</strong>
-    </div>
-    <div v-else-if="isError">
-      <img class="img_state" src="src/assets/error.png" alt="">
-      <br>
-      <strong>Server error :'(</strong>
-    </div>
+
+    <v-loader :type="'files'" v-if="isLoading"></v-loader>
+
+    <v-error v-else-if="isError"></v-error>
+    
     <ul v-else>
       <li v-for="file in files">
         <v-file :file="file"></v-file>
-      </li>
+      </li>  
     </ul>
+  
   </div>
 </template>
 
 <script>
   import env from 'env'
   import File from './File.vue'
-
+  import Error from './Error.vue'
+  import Loader from './Loader.vue'
+ 
   export default {
     name: 'files',
+    components: {
+      'v-file': File,
+      'v-loader': Loader,
+      'v-error': Error,
+    },
     data() {
       return {
         isLoading: true,
@@ -36,16 +40,13 @@
       fetch(`${env.api}/files`)
         .then(resp => resp.json())
         .then(data => {
-          this.files = data
-          this.isLoading = false;
+            this.files = data
+            this.isLoading = false;
         })
         .catch(() => {
           this.isLoading = false;
           this.isError = true;
         })
-    },
-    components: {
-      'v-file': File,
     },
     sockets: {
       files: function (files) {

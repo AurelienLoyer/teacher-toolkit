@@ -5,6 +5,9 @@
                 BACK
             </router-link>
             Top Secret Panel
+            <div class="logout" @click="logout()">
+                icon door
+            </div>
         </header>
 
         <div class="links-form">
@@ -66,6 +69,11 @@
             }
         },
         methods: {
+            logout() {
+                console.log('💩')
+                localStorage.removeItem('password')
+                this.$router.push('/')
+            },
             addLine() {
                 this.links.push('');
             },
@@ -118,6 +126,10 @@
             background: #1aa263;
             padding: 1px 10px;
             text-decoration: none;
+        }
+
+        .logout {
+            float: right;
         }
     }
 

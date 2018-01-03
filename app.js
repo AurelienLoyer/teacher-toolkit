@@ -10,16 +10,17 @@ const fs = require('fs');
 const path = require('path');
 const readlineSync = require('readline-sync');
 const ngrok = require('ngrok');
+const opn = require('opn');
 const utils = require('./utils.js');
 
 const port = config.port;
 const filePath = config.file_path;
 
 // Get start parameter
-const formation = readlineSync.question(`Qu'elle est votre formation (${config.default_formation}) ?  `) ||  config.default_formation;
-const who = readlineSync.question(`Qu'elle est votre nom (${config.default_who}) ?  `) ||  config.default_who;
-const email = readlineSync.question(`Qu'elle est votre email (${config.default_email}) ?  `) ||  config.default_email;
-const password = readlineSync.question(`Votre mot de passe pour la page admin (${config.admin_password}) ?  `) ||  config.admin_password;
+const formation = readlineSync.question(`Qu'elle est votre formation (${config.default_formation}) ?  `) || config.default_formation;
+const who = readlineSync.question(`Qu'elle est votre nom (${config.default_who}) ?  `) || config.default_who;
+const email = readlineSync.question(`Qu'elle est votre email (${config.default_email}) ?  `) || config.default_email;
+const password = readlineSync.question(`Votre mot de passe pour la page admin (${config.admin_password}) ?  `) || config.admin_password;
 const twitter = readlineSync.question(`Votre Twitter ? (${config.default_twitter}) `) || config.default_twitter;
 const github = readlineSync.question(`Votre GitHub ? (${config.default_github}) `) || config.default_github;
 
@@ -34,12 +35,16 @@ if (process.argv && process.argv[2] === 'ngrok') {
     subdomain: config.ngrok_subdomain,
     addr: port,
   }, function (err, url) {
-    if (!err)
-      console.log(`Interface accessible depuis : ${url}`)
-    else {
-      console.log(err)
-      exit()
+
+    if (!err) {
+      console.log(`Interface accessible depuis : ${url}`);
+      opn(url);
     }
+    else {
+      console.log(err);
+      exit();
+    }
+    
   });
 }
 
@@ -97,7 +102,7 @@ app.get('/files/:name', function (req, res) {
   console.log(`+1 DL de ${filename}`);
   io.emit('download', filename);
 
-  if (totalDownload[filename])  {
+  if (totalDownload[filename]) {
     totalDownload[filename] = totalDownload[filename] + 1
   }
   else {
@@ -119,11 +124,11 @@ app.get('/links', function (req, res) {
 });
 
 app.post('/links', function (req, res) {
-  if (req.query.password === password){
+  if (req.query.password === password) {
     fs.writeFileSync(config.links_file, JSON.stringify(req.body));
     res.json(links);
   }
-  else { 
+  else {
     res.sendStatus(401);
   }
 });
@@ -131,10 +136,10 @@ app.post('/links', function (req, res) {
 // ADMIN routes
 
 app.post('/password', function (req, res) {
-  if (req.body.password === password){
+  if (req.body.password === password) {
     res.sendStatus(200);
   }
-  else { 
+  else {
     res.sendStatus(401);
   }
 });
@@ -146,10 +151,10 @@ fs.watch(filePath, () => {
 });
 fs.watch(config.links_file, () => {
   let data = fs.readFileSync(config.links_file, 'utf8');
-  if(utils.isValidJsonString(data)){
+  if (utils.isValidJsonString(data)) {
     links = JSON.parse(data);
     io.emit('links', links);
-  } 
+  }
 });
 
 io.on('connection', function (socket) {

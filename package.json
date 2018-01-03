@@ -16,7 +16,7 @@
   "scripts": {
     "start": "npm run expose",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "expose": "node app.js ngrok"
+    "expose": "node back/app.js ngrok"
   },
   "author": "Aurélien Loyer",
   "license": "ISC"

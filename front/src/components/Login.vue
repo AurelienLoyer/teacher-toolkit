@@ -1,6 +1,11 @@
 <template lang="html">
     <div class="admin">
-        <header>Login</header>
+        <header>
+            <router-link to="/" class="back-btn">
+                <i class="fa fa-long-arrow-left"></i>
+            </router-link>
+            Login
+        </header>
 
         <form class="login-form" @submit.prevent="log()">
             <h2>Enter your password</h2>
@@ -8,7 +13,7 @@
 
             <a @click="log()" v-if="password" class="btn btn-green login">
                 Log In
-            </a>    
+            </a>
         </form>
     </div>
 </template>
@@ -28,15 +33,15 @@
 
         },
         sockets: {
-            
+
         },
         methods: {
             log() {
                 if (this.password) {
-                    this.$http.post(`${env.api}/password`,{'password': this.password})
+                    this.$http.post(`${env.api}/password`, { 'password': this.password })
                         .then(res => {
                             console.log(res)
-                            localStorage.setItem('password',this.password)
+                            localStorage.setItem('password', this.password)
                             this.$router.push('admin')
                         })
                         .catch(e => {
@@ -56,6 +61,14 @@
         margin: 0px;
         padding: 10px;
         text-transform: uppercase;
+        
+        .back-btn {
+            color: black;
+            float: left;
+            background: #1aa263;
+            padding: 1px 10px;
+            text-decoration: none;
+        }
     }
 
     label {

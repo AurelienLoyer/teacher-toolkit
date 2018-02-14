@@ -2,11 +2,11 @@
     <div class="admin">
         <header>
             <router-link to="/" class="back-btn">
-                BACK
+                <i class="fa fa-long-arrow-left"></i>
             </router-link>
             Top Secret Panel
             <div class="logout" @click="logout()">
-                icon door
+                <i class="fa fa-sign-out"></i>
             </div>
         </header>
 

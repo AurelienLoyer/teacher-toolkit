@@ -8,7 +8,7 @@
 
     <ul v-else>
       <li v-for="link in links" v-if="link">
-        <a target="_blank" :href="link">
+        <a target="_blank" :href="link" :title="link">
           <i class="fa fa-link" aria-hidden="true"></i>
           {{link}}
         </a>

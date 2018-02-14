@@ -10,12 +10,13 @@
             </div>
         </header>
 
+        <div>
+            <h2>Training end ?</h2>
+
+        </div>
+
         <div class="links-form">
             <h2>Add links</h2>
-            <label @click="changeSaveMode()">
-                Auto-save
-                <i class="fa" :class="`fa-toggle-${autoSave}`" aria-hidden="true"></i>
-            </label>
             <ul>
                 <li v-for="(link,i) of links">
                     <input type="text" v-model="links[i]">
@@ -29,11 +30,8 @@
                     </a>
                 </li>
             </ul>
-
-            <a @click="saveAll()" v-if="autoSave === 'off'" class="btn btn-yellow saveAll">
-                <i class="fa fa-floppy-o" aria-hidden="true"></i>
-            </a>
         </div>
+
     </div>
 </template>
 
@@ -46,7 +44,6 @@
         data() {
             return {
                 links: [],
-                autoSave: localStorage.getItem('autoSave') ||  'off',
                 password: localStorage.getItem('password'),
             }
         },
@@ -64,9 +61,9 @@
             }
         },
         sockets: {
-            links: function (links) {
+            links(links) {
                 this.links = links
-            }
+            },
         },
         methods: {
             logout() {
@@ -79,15 +76,6 @@
             },
             deleteLine(index) {
                 this.links.splice(index, 1)
-            },
-            changeSaveMode() {
-                if (this.autoSave === 'on') {
-                    this.autoSave = 'off'
-                }
-                else {
-                    this.autoSave = 'on'
-                }
-                localStorage.setItem('autoSave', this.autoSave)
             },
             saveAll() {
                 this.$http.post(`${env.api}/links?password=${this.password}`, this.links)
@@ -102,9 +90,7 @@
         },
         watch: {
             links() {
-                if (this.autoSave === 'on') {
-                    this.saveAll()
-                }
+                this.saveAll()
             },
         },
         sockets: {

@@ -4,4 +4,4 @@ npm-debug.log
 yarn-error.log
 
 files/*
-links.json
+storages/*

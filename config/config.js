@@ -1,7 +1,7 @@
 module.exports = {
   port: 1337,
   file_path: 'files',
-  links_file: 'links.json',
+  links_file: 'storages/links.json',
 
   default_formation: 'VueJS',
   default_who: 'Aurélien Loyer',
@@ -11,7 +11,7 @@ module.exports = {
 
   ngrok_proto: 'http', // http|tcp|tls
   ngrok_auth: '', // http basic authentication for tunnel
-  ngrok_subdomain: '', // reserved tunnel name https://alex.ngrok.io
+  ngrok_subdomain: '', // reserved tunnel name https://aurelien.ngrok.io
 
   theme_color: '#48B884',
   admin_password: 'batman',

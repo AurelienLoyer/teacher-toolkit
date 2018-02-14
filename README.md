@@ -11,4 +11,4 @@ Simple files/links share using Node.js / VueJS / Ngrok :+1:
 
 ## Preview
 
-![screen](screen/screen_2.png)
+![screen](screen/screen_3.png)

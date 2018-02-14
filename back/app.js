@@ -1,5 +1,5 @@
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
-const config = require('./config/config.js');
+const config = require('../config/config.js');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser')
@@ -8,7 +8,7 @@ const server = require('http').createServer(app);
 const io = require('socket.io')(server);
 const fs = require('fs');
 const path = require('path');
-const readlineSync = require('readline-sync');
+
 const ngrok = require('ngrok');
 const opn = require('opn');
 const utils = require('./utils.js');
@@ -17,12 +17,7 @@ const port = config.port;
 const filePath = config.file_path;
 
 // Get start parameter
-const formation = readlineSync.question(`Quelle est votre formation (${config.default_formation}) ?  `) ||  config.default_formation;
-const who = readlineSync.question(`Quel est votre nom (${config.default_who}) ?  `) ||  config.default_who;
-const email = readlineSync.question(`Quel est votre email (${config.default_email}) ?  `) ||  config.default_email;
-const password = readlineSync.question(`Votre mot de passe pour la page admin (${config.admin_password}) ?  `) ||  config.admin_password;
-const twitter = readlineSync.question(`Votre Twitter ? (${config.default_twitter}) `) || config.default_twitter;
-const github = readlineSync.question(`Votre GitHub ? (${config.default_github}) `) || config.default_github;
+const { formation, who, email, password, twitter, github } = utils.getAnswers();
 
 server.listen(port);
 console.log(`Server Run / Mode ${env} / Port ${port} 🎄`);
@@ -44,7 +39,7 @@ if (process.argv && process.argv[2] === 'ngrok') {
       console.log(err);
       exit();
     }
-    
+
   });
 }
 

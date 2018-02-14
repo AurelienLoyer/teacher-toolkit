@@ -3,7 +3,7 @@ module.exports = {
   file_path: 'files',
   links_file: 'links.json',
 
-  default_formation: 'VueJs',
+  default_formation: 'VueJS',
   default_who: 'Aurélien Loyer',
   default_email: 'aurelien.loyer@zenika.com',
   default_twitter: '@AurelienLoyer',
@@ -14,5 +14,5 @@ module.exports = {
   ngrok_subdomain: '', // reserved tunnel name https://alex.ngrok.io
 
   theme_color: '#48B884',
-  admin_password: 'batman', 
+  admin_password: 'batman',
 }

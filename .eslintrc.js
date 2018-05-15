@@ -16,7 +16,7 @@ module.exports = {
     "object-curly-spacing": [2, "always"],
 
     // specify the maximum cyclomatic complexity allowed in a program
-    complexity: [2, 7],
+    complexity: [2, 10],
     // specify the maximum depth that blocks can be nested
     "max-depth": [2, 3],
     // limits the number of parameters that can be used in the function declaration.
@@ -27,5 +27,8 @@ module.exports = {
     "max-statements": [1, 30],
     // restrict the number of statements per line
     "max-statements-per-line": [2, { max: 1 }]
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
   }
 };

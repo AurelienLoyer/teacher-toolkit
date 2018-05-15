@@ -71,7 +71,7 @@
   }
 
   h2 {
-    background: #42b983;
+    background: var(--main-theme-color);
     margin: 0px 20px;
     color: white;
   }

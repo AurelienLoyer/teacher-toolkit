@@ -23,7 +23,7 @@
 
 <style scoped lang="scss">
     footer {
-        background: #42b983;
+        background: var(--main-theme-color);
         color: white;
         margin: 0px;
         padding: 5px;
@@ -34,11 +34,11 @@
         a {
             color: white;
         }
-        i{
+        i {
             transition: all 0.2s;
         }
-        &:hover{
-            i{
+        &:hover {
+            i {
                 transform: scale(1.1);
                 color: black;
             }

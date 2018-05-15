@@ -11,7 +11,7 @@
             <h2>Enter your password</h2>
             <input type="password" v-model="password" placeholder="password">
 
-            <a @click="log()" v-if="password" class="btn btn-green login">
+            <a @click="log()" v-if="password" class="btn btn-theme-color login">
                 Log In
             </a>
         </form>
@@ -56,7 +56,7 @@
 
 <style scoped lang="scss">
     header {
-        background: #42b983;
+        background: var(--main-theme-color);
         color: white;
         margin: 0px;
         padding: 10px;
@@ -115,8 +115,8 @@
             background: #59b3f0;
             color: white
         }
-        &.btn-green {
-            background: #48B884;
+        &.btn-theme-color {
+            background: var(--main-theme-color);
             color: white
         }
         &.btn-yellow {

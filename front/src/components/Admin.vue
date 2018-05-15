@@ -10,9 +10,19 @@
             </div>
         </header>
 
-        <div>
-            <h2>Training end ?</h2>
+        <div class="color-form">
+            <h2>Change color</h2>
+            <input type="color" v-model="color"/> <br> 
+            <a @click="changeColor()" class="btn btn-theme-color">
+                <i class="fa fa-paint-brush" aria-hidden="true"></i>
+            </a>
+        </div>
 
+        <div class="open-form">
+            <h2>Add files</h2>
+            <a @click="openFolder()" class="btn btn-theme-color">
+                <i class="fa fa-folder" aria-hidden="true"></i>
+            </a>
         </div>
 
         <div class="links-form">
@@ -25,7 +35,7 @@
                     </a>
                 </li>
                 <li class="addLine">
-                    <a @click="addLine()" class="btn btn-green">
+                    <a @click="addLine()" class="btn btn-theme-color">
                         <i class="fa fa-plus" aria-hidden="true"></i>
                     </a>
                 </li>
@@ -44,6 +54,7 @@
         data() {
             return {
                 links: [],
+                color: '',
                 password: localStorage.getItem('password'),
             }
         },
@@ -58,6 +69,14 @@
                     .catch(e => {
                         console.log(e)
                     })
+
+                fetch(env.api + '/infos')
+                    .then(resp => resp.json())
+                    .then(data => {
+                        this.color = data.color
+                    })
+                    .catch(() => {
+                    })
             }
         },
         sockets: {
@@ -66,6 +85,23 @@
             },
         },
         methods: {
+
+            openFolder() {
+                fetch(`${env.api}/openFolder?password=${this.password}`)
+                    .catch(() => {
+                    })
+            },
+
+            changeColor() {
+                this.$http.post(`${env.api}/color?password=${this.password}`, {color: this.color})
+                    .catch(e => {
+                        if (e.status === 401) {
+                            console.log('💩')
+                            localStorage.removeItem('password')
+                            this.$router.push('login')
+                        }
+                    })
+            },
             logout() {
                 console.log('💩')
                 localStorage.removeItem('password')
@@ -99,8 +135,27 @@
 </script>
 
 <style scoped lang="scss">
+    .open-form {
+        a{
+            width: 100px;
+        }
+    }
+
+    .color-form{
+        input{
+            width: 200px;
+            padding: 0;
+            height: 50px;
+            border-radius: 20px;
+            border: none;
+        }
+        a{
+            width: 100px;
+        }
+    }
+
     header {
-        background: #42b983;
+        background: var(--main-theme-color);
         color: white;
         margin: 0px;
         padding: 10px;
@@ -109,12 +164,15 @@
         .back-btn {
             color: black;
             float: left;
-            background: #1aa263;
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
             padding: 1px 10px;
             text-decoration: none;
         }
 
         .logout {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1px 10px;
             float: right;
         }
     }
@@ -173,8 +231,8 @@
             background: #59b3f0;
             color: white
         }
-        &.btn-green {
-            background: #48B884;
+        &.btn-theme-color {
+            background: var(--main-theme-color);
             color: white
         }
         &.btn-yellow {

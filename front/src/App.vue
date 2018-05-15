@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <link rel="stylesheet" :href="`${env.api}/theme.css`">
     <router-view></router-view>
     <v-footer></v-footer>
   </div>
@@ -7,15 +8,23 @@
 
 <script>
 
+  import env from 'env'
   import Footer from './components/Footer.vue'
 
   export default {
     name: 'app',
     data() {
-      return {}
+      return {
+        env
+      }
     },
     components: {
       'v-footer': Footer,
+    },
+    sockets: {
+      reload: function () {
+        document.location.reload()
+      }
     },
   }
 </script>
@@ -53,6 +62,6 @@
   }
 
   a {
-    color: #42b983;
+    color: var(--main-theme-color);
   }
 </style>

@@ -15,13 +15,13 @@
       </h2>
       <ul class="social">
         <li v-if="infos.github">
-          <a :href="`https://github.com/${infos.github}`">
+          <a target="_blank" :href="`https://github.com/${infos.github}`">
             <i class="fa fa-github" aria-hidden="true"></i>
             {{infos.github}}
           </a>
         </li>
         <li v-if="infos.twitter">
-          <a :href="`https://twitter.com/${infos.twitter}`">
+          <a target="_blank" :href="`https://twitter.com/${infos.twitter}`">
             <i class="fa fa-twitter" aria-hidden="true"></i>
             {{infos.twitter}}
           </a>
@@ -67,7 +67,7 @@
     padding: 1px;
 
     h1 {
-      background: #42b983;
+      background: var(--main-theme-color);
       color: white;
       margin: 0px;
       padding: 10px;
@@ -81,10 +81,10 @@
       padding: 10px;
       top: 14px;
       font-size: 12px;
-      border-left: solid 30px #42b983;
+      border-left: solid 30px var(--main-theme-color);
       transition: all 0.2s;
       right: -80px;
-      &:hover{
+      &:hover {
         right: 0px;
       }
     }

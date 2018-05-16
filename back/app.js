@@ -72,12 +72,13 @@ app.get('/', function (req, res) {
 if (!fs.existsSync(filePath)) {
     fs.mkdirSync(filePath);
 }
-if (!fs.existsSync(config.links_file)) {
-    fs.writeFileSync(config.links_file, JSON.stringify([]));
+if (!fs.existsSync(config.link_path)) {
+    fs.mkdirSync(config.link_path);
+    fs.writeFileSync(`${config.link_path}/links.json`, JSON.stringify([]));
 }
 
 let files = fs.readdirSync(filePath).filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
-let links = JSON.parse(fs.readFileSync(config.links_file, 'utf8'));
+let links = JSON.parse(fs.readFileSync(`${config.link_path}/links.json`, 'utf8'));
 
 const totalDownload = {};
 
@@ -146,7 +147,7 @@ app.post('/color', function (req, res) {
 
 app.post('/links', function (req, res) {
     if (req.query.password === password) {
-        fs.writeFileSync(config.links_file, JSON.stringify(req.body));
+        fs.writeFileSync(`${config.link_path}/links.json`, JSON.stringify(req.body));
         res.json(links);
     }
     else {
@@ -181,8 +182,8 @@ fs.watch(filePath, () => {
     io.emit('files', files);
 });
 
-fs.watch(config.links_file, () => {
-    const data = fs.readFileSync(config.links_file, 'utf8');
+fs.watch(`${config.link_path}/links.json`, () => {
+    const data = fs.readFileSync(`${config.link_path}/links.json`, 'utf8');
     if (utils.isValidJsonString(data)) {
         links = JSON.parse(data);
         io.emit('links', links);

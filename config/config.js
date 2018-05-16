@@ -1,7 +1,7 @@
 module.exports = {
   port: 1337,
   file_path: 'files',
-  links_file: 'storages/links.json',
+  link_path: 'storages',
 
   default_lang: 'fr',
   default_formation: 'VueJS',

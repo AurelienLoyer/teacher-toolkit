@@ -7,10 +7,10 @@
     "body-parser": "^1.18.2",
     "cors": "^2.8.4",
     "express": "^4.16.2",
-    "ngrok": "^2.2.24",
+    "ngrok": "^3.0.1",
     "opn": "^5.1.0",
     "readline-sync": "^1.4.7",
-    "socket.io": "^1.7.4"
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {},
   "scripts": {

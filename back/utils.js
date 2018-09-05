@@ -2,7 +2,6 @@ const readlineSync = require('readline-sync');
 const { exec } = require('child_process');
 const config = require('../config/config.js');
 
-
 isValidJsonString = (str) => {
     try {
         JSON.parse(str);

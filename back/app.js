@@ -20,7 +20,6 @@ const filePath = config.file_path;
 const { formation, who, email, password, twitter, github } = utils.getAnswers();
 
 server.listen(port);
-console.log(`A 🦄 say: Server Run / Mode ${env} / Port ${port}`);
 
 // If run expose launch ngrok
 if (process.argv && process.argv[2] === 'ngrok') {
@@ -29,17 +28,17 @@ if (process.argv && process.argv[2] === 'ngrok') {
         auth: config.ngrok_auth,
         subdomain: config.ngrok_subdomain,
         addr: port,
-    }, function (err, url) {
-        if (err) {
-            console.log(err);
-            process.exit(1);
-        }
-        else {
-            console.log(`Interface accessible depuis : ${url}`);
-            opn(url);
-        }
-
-    });
+    })
+    .then((url) => {
+        console.log(`Ngrok url 🎉 : ${url}`);
+        opn(url);
+    })
+    .catch(err => {
+        console.log(err);
+        process.exit(1);
+    })
+}else {
+    console.log(`A 🦄 say: Server Run / Mode ${env} / Port ${port}`);
 }
 
 app.use(express.static('front'));
@@ -53,13 +52,13 @@ app.all('*', function (req, res, next) {
 });
 
 app.get('/theme.css', function (req, res) {
-  res.writeHead(200, { 'content-type': 'text/css' });
-  res.write(`
+    res.writeHead(200, { 'content-type': 'text/css' });
+    res.write(`
     :root {
       --main-theme-color: ${config.theme_color};
     }
   `);
-  res.end();
+    res.end();
 });
 
 app.get('/', function (req, res) {
@@ -134,7 +133,7 @@ app.get('/links', function (req, res) {
 
 app.post('/color', function (req, res) {
     if (req.query.password === password) {
-        if(req.body.color) {
+        if (req.body.color) {
             config.theme_color = req.body.color;
         }
         res.sendStatus(200);
@@ -157,8 +156,8 @@ app.post('/links', function (req, res) {
 
 app.get('/openFolder', function (req, res) {
     if (req.query.password === password) {
-      utils.openDirectory(path.join(__dirname, '/../', filePath));
-      res.sendStatus(200);
+        utils.openDirectory(path.join(__dirname, '/../', filePath));
+        res.sendStatus(200);
     }
     else {
         res.sendStatus(401);
@@ -192,4 +191,4 @@ fs.watch(`${config.link_path}/links.json`, () => {
 
 // SOCKET part
 
-io.on('connection', function () {});
+io.on('connection', function () { });

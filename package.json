@@ -1,14 +1,25 @@
 {
   "name": "teacher-toolkit",
-  "version": "1.0.5",
-  "description": "",
+  "version": "1.0.7",
+  "description": "Simple files, links share using Node.js / Vue.js / Ngrok",
+  "keywords": [
+    "tools",
+    "fileshare",
+    "teacher",
+    "share"
+  ],
   "main": "app.js",
   "author": "Aurélien Loyer",
-  "license": "ISC",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/T3kstiil3/teacher-toolkit"
+  },
+  "homepage": "https://github.com/T3kstiil3/teacher-toolkit",
   "scripts": {
     "start": "npm run expose",
     "dev": "node app/index.js 'dev'",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "",
     "expose": "node app/index.js"
   },
   "bin": {

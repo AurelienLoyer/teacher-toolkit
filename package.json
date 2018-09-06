@@ -19,8 +19,9 @@
   "scripts": {
     "start": "npm run expose",
     "dev": "node app/index.js 'dev'",
-    "test": "",
-    "expose": "node app/index.js"
+    "expose": "node app/index.js",
+    "test": "mocha test",
+    "lint": "eslint app"
   },
   "bin": {
     "teacher-toolkit": "./app/index.js"
@@ -34,5 +35,10 @@
     "readline-sync": "1.4.7",
     "socket.io": "2.1.1"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "eslint": "^5.5.0",
+    "mocha": "^5.2.0",
+    "sinon": "^6.2.0"
+  }
 }

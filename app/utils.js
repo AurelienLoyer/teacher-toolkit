@@ -53,11 +53,11 @@ openDirectory = (directoryFullPath, callback) => {
         try {
             exec(fullCommand, (err, stdout, stderr) => callback(fullCommand, err, stdout, stderr));
         } catch (error) {
-            callback(false, error);
+            callback(fullCommand, error);
         }
         
     } else {
-        callback(false, new Error(`Platform ${process.platform} not support for the moment`));
+        callback('', new Error(`Platform ${process.platform} not support for the moment`));
     }
 }
 

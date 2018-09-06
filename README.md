@@ -1,8 +1,4 @@
-# Teacher Toolkit
-
-[![npm version](https://badgen.net/npm/v/teacher-toolkit)](https://npmjs.com/package/teacher-toolkit)
-[![npm downloads](https://badgen.net/npm/dm/teacher-toolkit)](https://npmjs.com/package/teacher-toolkit)
-[![npm downloads](https://badgen.net/npm/dt/teacher-toolkit)](https://npmjs.com/package/teacher-toolkit)
+# Teacher Toolkit [![npm version](https://badgen.net/npm/v/teacher-toolkit)](https://npmjs.com/package/teacher-toolkit) [![npm downloads](https://badgen.net/npm/dm/teacher-toolkit)](https://npmjs.com/package/teacher-toolkit) [![npm downloads](https://badgen.net/npm/dt/teacher-toolkit)](https://npmjs.com/package/teacher-toolkit)
 
 Simple files, links share using Node.js / Vue.js / Ngrok 👍
 
@@ -33,6 +29,7 @@ Simple files, links share using Node.js / Vue.js / Ngrok 👍
 </a>
 
 ### User screen
+
 ![screen](https://github.com/T3kstiil3/teacher_toolkit/raw/master/screen/screen_3.png)
 
 ### Admin screen

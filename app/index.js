@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const env = process.env.NODE_ENV === 'production' ? 'prod' : 'dev';
 const config = require('../config/config.js');
 const express = require('express');
@@ -15,14 +17,18 @@ const utils = require('./utils.js');
 
 const port = config.port;
 const filePath = config.file_path;
+const fullLinksPath = `${path.join(__dirname, '/../', config.link_path)}/links.json`;
+const fullFilesPath = path.join(__dirname, '/../', filePath);
+const totalDownload = {};
 
 // Get start parameter
 const { formation, who, email, password, twitter, github } = utils.getAnswers();
 
 server.listen(port);
 
-// If run expose launch ngrok
-if (process.argv && process.argv[2] === 'ngrok') {
+if (process.argv && process.argv[2] === 'dev') {
+    console.log(`A 🦄 say: Server Run / Mode ${env} / Port ${port}`);
+}else {
     ngrok.connect({
         proto: config.ngrok_proto,
         auth: config.ngrok_auth,
@@ -31,17 +37,22 @@ if (process.argv && process.argv[2] === 'ngrok') {
     })
     .then((url) => {
         console.log(`Ngrok url 🎉 : ${url}`);
-        opn(url);
+        opn(url)
+            .then(()=> {
+                console.log('Opening your favorite browser 👌')
+            })
+            .catch((err) => {
+                console.log('Error during opening your favorite browser 😅')
+                console.log('You can copy the Ngrok url to access it');
+            })
     })
-    .catch(err => {
+    .catch((err) => {
         console.log(err);
         process.exit(1);
     })
-}else {
-    console.log(`A 🦄 say: Server Run / Mode ${env} / Port ${port}`);
 }
 
-app.use(express.static('front'));
+app.use(express.static(path.join(__dirname, '/../', `front/`)));
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -62,24 +73,22 @@ app.get('/theme.css', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-    res.sendfile(`${__dirname}/front/index.html`);
-    app.use(express.static(`${__dirname}/front`));
+    res.sendFile(path.join(__dirname, '/../', `front/index.html`));
 });
 
 // Get items to share
 
-if (!fs.existsSync(filePath)) {
-    fs.mkdirSync(filePath);
-}
-if (!fs.existsSync(config.link_path)) {
-    fs.mkdirSync(config.link_path);
-    fs.writeFileSync(`${config.link_path}/links.json`, JSON.stringify([]));
+if (!fs.existsSync(fullFilesPath)) {
+    fs.mkdirSync(fullFilesPath);
 }
 
-let files = fs.readdirSync(filePath).filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
-let links = JSON.parse(fs.readFileSync(`${config.link_path}/links.json`, 'utf8'));
+if (!fs.existsSync(path.join(__dirname, '/../', config.link_path))) {
+    fs.mkdirSync(path.join(__dirname, '/../', config.link_path));
+    fs.writeFileSync(fullLinksPath, JSON.stringify([]));
+}
 
-const totalDownload = {};
+let files = fs.readdirSync(fullFilesPath).filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
+let links = JSON.parse(fs.readFileSync(fullLinksPath, 'utf8'));    
 
 app.get('/infos', function (req, res) {
     res.json({
@@ -95,8 +104,8 @@ app.get('/infos', function (req, res) {
 app.get('/files/:name', function (req, res) {
     const filename = req.params.name;
 
-    const fullPath = path.join(__dirname, '/../', filePath, filename);
-    const stat = fs.statSync(fullPath);
+    const fullFilePath = path.join(fullFilesPath, filename);
+    const stat = fs.statSync(fullFilePath);
 
     res.writeHead(200, {
         'content-type': 'application/zip',
@@ -104,7 +113,6 @@ app.get('/files/:name', function (req, res) {
         'content-disposition': 'attachment; filename=' + filename,
     });
 
-    // TODO add front animation :)
     console.log(`+1 DL de ${filename}`);
     io.emit('download', filename);
 
@@ -116,7 +124,7 @@ app.get('/files/:name', function (req, res) {
     }
     io.emit('totalDownload', totalDownload);
 
-    const readStream = fs.createReadStream(fullPath);
+    const readStream = fs.createReadStream(fullFilePath);
     readStream.pipe(res);
 
 });
@@ -146,7 +154,7 @@ app.post('/color', function (req, res) {
 
 app.post('/links', function (req, res) {
     if (req.query.password === password) {
-        fs.writeFileSync(`${config.link_path}/links.json`, JSON.stringify(req.body));
+        fs.writeFileSync(fullLinksPath, JSON.stringify(req.body));
         res.json(links);
     }
     else {
@@ -156,7 +164,7 @@ app.post('/links', function (req, res) {
 
 app.get('/openFolder', function (req, res) {
     if (req.query.password === password) {
-        utils.openDirectory(path.join(__dirname, '/../', filePath));
+        utils.openDirectory(fullFilesPath);
         res.sendStatus(200);
     }
     else {
@@ -175,14 +183,14 @@ app.post('/password', function (req, res) {
 
 // WATCH files
 
-fs.watch(filePath, () => {
-    files = fs.readdirSync(filePath)
+fs.watch(fullFilesPath, () => {
+    files = fs.readdirSync(fullFilesPath)
         .filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
     io.emit('files', files);
 });
 
-fs.watch(`${config.link_path}/links.json`, () => {
-    const data = fs.readFileSync(`${config.link_path}/links.json`, 'utf8');
+fs.watch(fullLinksPath, () => {
+    const data = fs.readFileSync(fullLinksPath, 'utf8');
     if (utils.isValidJsonString(data)) {
         links = JSON.parse(data);
         io.emit('links', links);

@@ -1,7 +1,7 @@
 <template lang="html">
     <footer>Made with
         <i class="fa fa-heart" aria-hidden="true"></i> by
-        <a target="_blank" href="https://github.com/T3kstiil3/teacher_toolkit">Aurélien</a>
+        <a target="_blank" href="https://github.com/T3kstiil3/teacher-toolkit">Aurélien</a>
     </footer>
 </template>
 

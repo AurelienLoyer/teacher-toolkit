@@ -164,8 +164,16 @@ app.post('/links', function (req, res) {
 
 app.get('/openFolder', function (req, res) {
     if (req.query.password === password) {
-        utils.openDirectory(fullFilesPath);
-        res.sendStatus(200);
+        utils.openDirectory(fullFilesPath, (err) => {
+            if (err) {
+                console.log(`🛑 Error during executing command: ${command} ${directoryFullPath}`);
+                console.log(err);
+                res.sendStatus(500);
+            }
+            else {
+                res.sendStatus(200);
+            }
+        });
     }
     else {
         res.sendStatus(401);

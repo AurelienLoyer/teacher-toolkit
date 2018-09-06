@@ -19,7 +19,25 @@ Simple files, links share using Node.js / Vue.js / Ngrok 👍
 - Add new links
 - Enjoy 🦄
 
-## Preview
+## How to enjoy
+
+> 1 - Start App
+
+<img src="screen/01-start-app.gif" alt="start-app" width="60%" />
+
+> 2 - Open directory    
+
+<img src="screen/02-open-directory.gif" alt="open-directory" width="60%" />
+
+> 3 - Add files
+
+<img src="screen/03-add-files.gif" alt="add-files" width="60%" />
+
+> 4 - Share links
+
+<img src="screen/04-add-links.gif" alt="share-links" width="60%" />
+
+## Preview 
 
 ### Youtube video preview 🎬
 <a href="https://www.youtube.com/watch?v=SXe2fv5wMys" target="_blank">

@@ -1,6 +1,6 @@
 <template lang="html">
     <a class="file" :href="env.api +'/files/'+file">
-      <img :src="getFileIcon(file)" alt="">
+      <img :src="getFileIcon(file)" @error="imageLoadError" alt="">
       <span :title="file">{{file}}</span>
     </a>
 </template>
@@ -27,6 +27,9 @@ export default {
     getFileIcon(filename){
       const ext = filename.substr(filename.lastIndexOf('.') + 1)
       return `src/assets/icons/${ext}.png`
+    },
+    imageLoadError(e) {
+      e.target.src = `src/assets/icons/default.png`
     }
   }
 }

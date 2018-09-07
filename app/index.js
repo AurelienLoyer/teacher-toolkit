@@ -110,7 +110,7 @@ app.get('/files/:name', function (req, res) {
     res.writeHead(200, {
         'content-type': 'application/zip',
         'content-length': stat.size,
-        'content-disposition': 'attachment; filename=' + filename,
+        'content-disposition': `attachment; filename=${encodeURIComponent(filename)}`,
     });
 
     console.log(`+1 DL de ${filename}`);

@@ -7,10 +7,10 @@
     <v-error v-else-if="isError"></v-error>
 
     <ul v-else>
-      <li v-for="link in links" v-if="link">
-        <a target="_blank" :href="link" :title="link">
+      <li v-for="item in links" v-if="item.link">
+        <a target="_blank" :href="item.link" :title="item.label">
           <i class="fa fa-link" aria-hidden="true"></i>
-          {{link}}
+          {{item.label || item.link}}
         </a>
       </li>
     </ul>

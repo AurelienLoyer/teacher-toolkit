@@ -29,7 +29,8 @@
             <h2>Add links</h2>
             <ul>
                 <li v-for="(link,i) of links">
-                    <input type="text" v-model="links[i]">
+                    <input :keyup="saveAll()" placeholder="Label" class="label" type="text" v-model="links[i].label">
+                    <input :keyup="saveAll()" placeholder="Link" type="text" v-model="links[i].link">
                     <a class="btn btn-danger" @click="deleteLine(i)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
                     </a>
@@ -48,6 +49,7 @@
 <script>
 
     import env from 'env'
+import { isArray } from 'util';
 
     export default {
         name: 'admin',
@@ -65,6 +67,7 @@
             else {
                 fetch(`${env.api}/links?password=${this.password}`)
                     .then(resp => resp.json())
+                    .then(data => this.validLinks(data))
                     .then(data => this.links = data)
                     .catch(e => {
                         console.log(e)
@@ -85,6 +88,20 @@
             },
         },
         methods: {
+
+            validLinks(links) {
+                console.log(links);
+                if(isArray(links) && links.length === 0) return links;
+                else if (isArray(links) && links.length !== 0) {
+                    if(typeof links[0]  === "object" && links[0].link != undefined) {
+                        return links;
+                    }else{
+                        throw new Error('Invalid format in links.json file')
+                    }
+                }else {
+                    throw new Error('Invalid format in links.json file')
+                }
+            },
 
             openFolder() {
                 fetch(`${env.api}/openFolder?password=${this.password}`)
@@ -108,7 +125,7 @@
                 this.$router.push('/')
             },
             addLine() {
-                this.links.push('');
+                this.links.push({label:'',link:''});
             },
             deleteLine(index) {
                 this.links.splice(index, 1)
@@ -124,11 +141,6 @@
                     })
             },
         },
-        watch: {
-            links() {
-                this.saveAll()
-            },
-        },
         sockets: {
         },
     }
@@ -139,6 +151,11 @@
         a{
             width: 100px;
         }
+    }
+
+    input.label {
+        border-right: 2px solid;
+        width: 200px;
     }
 
     .color-form{
@@ -184,7 +201,7 @@
 
     ul {
         li {
-            width: 500px;
+            width: 700px;
             margin: 20px auto;
             background: rgba(128, 128, 128, 0.2);
             display: flex;

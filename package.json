@@ -21,6 +21,7 @@
     "dev": "node app/index.js 'dev'",
     "expose": "node app/index.js",
     "test": "mocha test",
+    "test:coverage": "nyc --all mocha test",
     "lint": "eslint app"
   },
   "bin": {
@@ -39,6 +40,7 @@
     "chai": "^4.1.2",
     "eslint": "^5.5.0",
     "mocha": "^5.2.0",
+    "nyc": "^13.0.1",
     "sinon": "^6.2.0"
   }
 }

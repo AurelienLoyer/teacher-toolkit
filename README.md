@@ -14,6 +14,7 @@ Simple files, links share using Node.js / Vue.js / Ngrok 👍
 
 - Edit or not config.js file
 - Run ```npm start```
+- Run ```npm install```
 - Drop files into files directory
 - Change app color
 - Add new links

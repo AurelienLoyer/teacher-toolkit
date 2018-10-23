@@ -13,6 +13,7 @@ Simple files, links share using Node.js / Vue.js / Ngrok 👍
 ```git clone https://github.com/T3kstiil3/teacher-toolkit.git```
 
 - Edit or not config.js file
+- Run ```npm install``
 - Run ```npm start```
 - Drop files into files directory
 - Change app color

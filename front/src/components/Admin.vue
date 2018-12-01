@@ -13,16 +13,16 @@
         <div class="color-form">
             <h2>Change color</h2>
             <input type="color" v-model="color"/> <br> 
-            <a @click="changeColor()" class="btn btn-theme-color">
+            <button @click="changeColor()" class="btn btn-theme-color">
                 <i class="fa fa-paint-brush" aria-hidden="true"></i>
-            </a>
+            </button>
         </div>
 
         <div class="open-form">
             <h2>Add files</h2>
-            <a @click="openFolder()" class="btn btn-theme-color">
+            <button @click="openFolder()" class="btn btn-theme-color">
                 <i class="fa fa-folder" aria-hidden="true"></i>
-            </a>
+            </button>
         </div>
 
         <div class="links-form">
@@ -31,14 +31,14 @@
                 <li v-for="(link,i) of links">
                     <input :keyup="saveAll()" placeholder="Label" class="label" type="text" v-model="links[i].label">
                     <input :keyup="saveAll()" placeholder="Link" type="text" v-model="links[i].link">
-                    <a class="btn btn-danger" @click="deleteLine(i)">
+                    <button class="btn btn-danger" @click="deleteLine(i)">
                         <i class="fa fa-trash" aria-hidden="true"></i>
-                    </a>
+                    </button>
                 </li>
                 <li class="addLine">
-                    <a @click="addLine()" class="btn btn-theme-color">
+                    <button @click="addLine()" class="btn btn-theme-color">
                         <i class="fa fa-plus" aria-hidden="true"></i>
-                    </a>
+                    </button>
                 </li>
             </ul>
         </div>
@@ -148,7 +148,7 @@ import { isArray } from 'util';
 
 <style scoped lang="scss">
     .open-form {
-        a{
+        button {
             width: 100px;
         }
     }
@@ -166,7 +166,7 @@ import { isArray } from 'util';
             border-radius: 20px;
             border: none;
         }
-        a{
+        button {
             width: 100px;
         }
     }
@@ -214,7 +214,7 @@ import { isArray } from 'util';
                 border: none;
                 justify-content: center;
                 background: none;
-                a {
+                button {
                     width: 100px;
                 }
             }

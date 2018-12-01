@@ -6,7 +6,10 @@ Simple files, links share using Node.js / Vue.js / Ngrok 👍
 
 ### Global
 
-`npm install -g teacher-toolkit`
+```shell
+npm install -g teacher-toolkit
+teacher-toolkit
+```
 
 ### Local
 

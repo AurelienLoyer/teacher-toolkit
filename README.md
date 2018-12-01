@@ -6,15 +6,18 @@ Simple files, links share using Node.js / Vue.js / Ngrok 👍
 
 ### Global
 
-```npm install -g teacher-toolkit```
+```shell
+npm install -g teacher-toolkit
+teacher-toolkit
+```
 
 ### Local
 
-```git clone https://github.com/T3kstiil3/teacher-toolkit.git```
+`git clone https://github.com/T3kstiil3/teacher-toolkit.git`
 
 - Edit or not config.js file
-- Run ```npm install``
-- Run ```npm start```
+- Run `npm install`
+- Run `npm start`
 - Drop files into files directory
 - Change app color
 - Add new links
@@ -26,7 +29,7 @@ Simple files, links share using Node.js / Vue.js / Ngrok 👍
 
 <img src="screen/01-start-app.gif" alt="start-app" width="60%" />
 
-> 2 - Open directory    
+> 2 - Open directory
 
 <img src="screen/02-open-directory.gif" alt="open-directory" width="60%" />
 
@@ -38,9 +41,10 @@ Simple files, links share using Node.js / Vue.js / Ngrok 👍
 
 <img src="screen/04-add-links.gif" alt="share-links" width="60%" />
 
-## Preview 
+## Preview
 
 ### Youtube video preview 🎬
+
 <a href="https://www.youtube.com/watch?v=SXe2fv5wMys" target="_blank">
 
 ![Teacher Toolkit video preview](https://github.com/T3kstiil3/teacher_toolkit/raw/master/screen/preview.png)

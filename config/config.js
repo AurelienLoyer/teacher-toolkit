@@ -3,6 +3,7 @@ module.exports = {
   file_path: 'files',
   link_path: 'storages',
 
+  default_useUserAnswer: 'Y',
   default_lang: 'fr',
   default_formation: 'VueJS',
   default_who: 'Aurélien Loyer',

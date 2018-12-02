@@ -1,6 +1,10 @@
 const readlineSync = require('readline-sync');
+const fs = require('fs');
 const { exec } = require('child_process');
 const config = require('../config/config.js');
+
+const homedirPath = require('os').homedir();
+const userFilePath = homedirPath + '/.teacher-toolkit.json'
 
 isValidJsonString = (str) => {
     try {
@@ -11,7 +15,29 @@ isValidJsonString = (str) => {
     return true;
 }
 
+storeUserAnswers = answers => {
+    fs.writeFileSync(userFilePath, JSON.stringify(answers));
+}
+
+getUserAnswers = () => {
+    try {
+        return require(userFilePath);
+    } catch(e) {
+        console.log(e)
+        return {}
+    }
+}
+
 getAnswers = () => {
+    const userAnswers = getUserAnswers();
+
+    if(userAnswers && userAnswers  !== {}){
+        const useUserAnswer = readlineSync.question(`Voulez vous utiliser vos préférences (Y/N) ?  `) || config.default_useUserAnswer;
+        if(useUserAnswer === 'Y'){
+            return userAnswers;
+        }
+    }
+     
     const lang = readlineSync.question(`Quelle est votre langue (${config.default_lang}) ?  `) || config.default_lang;
 
     if (lang === 'fr') {
@@ -21,8 +47,8 @@ getAnswers = () => {
         const password = readlineSync.question(`Votre mot de passe pour la page admin (${config.admin_password}) ?  `) || config.admin_password;
         const twitter = readlineSync.question(`Votre Twitter (${config.default_twitter}) ?  `) || config.default_twitter;
         const github = readlineSync.question(`Votre GitHub (${config.default_github}) ?  `) || config.default_github;
-
-        return {
+        
+        const answers = {
             lang,
             formation,
             who,
@@ -31,6 +57,8 @@ getAnswers = () => {
             twitter,
             github
         }
+        storeUserAnswers(answers)
+        return answers
     }
 
     console.log('A 🦄 say: Not supported langage for the moment 🔫');

@@ -1,5 +1,5 @@
 <template lang="html">
-    <a class="file" :href="env.api +'/files/'+file">
+    <a class="file" :href="`${api_url}/files/${file}`">
       <img :src="getFileIcon(file)" @error="imageLoadError" alt="">
       <span :title="file">{{file}}</span>
     </a>
@@ -7,32 +7,30 @@
 
 <script>
 
-import env from 'env'
-
 export default {
   name: 'file',
-  data () {
+  data() {
     return {
-      env:env
-    }
+      api_url: `${process.env.VUE_APP_API_URL}`,
+    };
   },
   components: {
   },
   props: [
-    'file'
+    'file',
   ],
-  created(){
+  created() {
   },
-  methods:{
-    getFileIcon(filename){
-      const ext = filename.substr(filename.lastIndexOf('.') + 1)
-      return `src/assets/icons/${ext}.png`
+  methods: {
+    getFileIcon(filename) {
+      const ext = filename.substr(filename.lastIndexOf('.') + 1);
+      return `./assets/icons/${ext}.png`;
     },
     imageLoadError(e) {
-      e.target.src = `src/assets/icons/default.png`
-    }
-  }
-}
+      e.target.src = './assets/icons/default.png';
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -44,7 +42,7 @@ export default {
   width: 200px;
   overflow: hidden;
   display: block;
-  
+
   &:hover{
     img{
       transform: scale(0.9);

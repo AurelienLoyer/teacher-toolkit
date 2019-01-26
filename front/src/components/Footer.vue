@@ -7,18 +7,18 @@
 
 <script>
 
-    export default {
-        name: 'footer',
-        data() {
-            return {
-            }
-        },
-        components: {
+export default {
+  name: 'v-footer',
+  data() {
+    return {
+    };
+  },
+  components: {
 
-        },
-        sockets: {
-        },
-    }
+  },
+  sockets: {
+  },
+};
 </script>
 
 <style scoped lang="scss">

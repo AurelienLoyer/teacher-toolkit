@@ -7,25 +7,24 @@
 </template>
 
 <script>
-import env from 'env'
-import Files from './Files.vue'
-import Links from './Links.vue'
-import Session from './Session.vue'
+import Files from './Files.vue';
+import Links from './Links.vue';
+import Session from './Session.vue';
 
 export default {
   name: 'home',
-  data () {
+  data() {
     return {
-    }
+    };
   },
   components: {
-    'v-files':Files,
-    'v-links':Links,
-    'v-session':Session,
+    'v-files': Files,
+    'v-links': Links,
+    'v-session': Session,
   },
-  sockets:{
+  sockets: {
   },
-}
+};
 </script>
 
 <style lang="css">

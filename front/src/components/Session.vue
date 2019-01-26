@@ -7,7 +7,8 @@
       {{url}}
     </h2>
     <div class="teacher">
-      <div class="avatar" style="background-image:url('src/assets/avatar.jpg'); display:none;"></div>
+      <div class="avatar" style="background-image:url('./assets/avatar.jpg'); display:none;">
+      </div>
       <h2 class="infos">
         {{infos.who}}
         <br>
@@ -32,34 +33,33 @@
 </template>
 
 <script>
-  import env from 'env'
-  import File from './File.vue'
 
-  export default {
-    name: 'files',
-    data() {
-      return {
-        infos: {},
-        url: window.location.origin,
-        isError: false,
-      }
-    },
-    components: {
-    },
-    created() {
-      this.$http.get(env.api + '/infos')
-        .then(response => {
-          this.infos = response.body
-          this.isError = false
-        })
-        .catch(() => {
-          this.isError = true
-        })
-    },
-    methods: {
-    },
+export default {
+  name: 'files',
+  data() {
+    return {
+      infos: {},
+      url: window.location.origin,
+      isError: false,
+    };
+  },
+  components: {
+  },
+  created() {
+    fetch(`${process.env.VUE_APP_API_URL}/infos`)
+      .then(resp => resp.json())
+      .then((data) => {
+        this.infos = data;
+        this.isError = false;
+      })
+      .catch(() => {
+        this.isError = true;
+      });
+  },
+  methods: {
+  },
 
-  }
+};
 </script>
 
 <style lang="scss">

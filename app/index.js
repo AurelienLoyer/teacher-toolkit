@@ -52,7 +52,7 @@ if (process.argv && process.argv[2] === 'dev') {
     })
 }
 
-app.use(express.static(path.join(__dirname, '/../', `front/`)));
+app.use(express.static(path.join(__dirname, '/../', `front/dist/`)));
 app.use(bodyParser.json());
 app.use(cors());
 
@@ -73,7 +73,7 @@ app.get('/theme.css', function (req, res) {
 });
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '/../', `front/index.html`));
+    res.sendFile(path.join(__dirname, '/../', `front/dist/index.html`));
 });
 
 // Get items to share

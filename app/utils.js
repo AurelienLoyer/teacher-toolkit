@@ -30,8 +30,8 @@ getUserAnswers = () => {
 getAnswers = () => {
     const userAnswers = getUserAnswers();
 
-    if (userAnswers && userAnswers !== {}) {
-        const useUserAnswer = readlineSync.question(`Voulez vous utiliser vos préférences (Y/N) ?  `) || config.default_useUserAnswer;
+    if (userAnswers && userAnswers.who) {
+        const useUserAnswer = readlineSync.question(`Voulez vous utiliser vos préférences (Y/n) ?  `) || config.default_useUserAnswer;
         if (useUserAnswer === 'Y') {
             return userAnswers;
         }
@@ -56,7 +56,9 @@ getAnswers = () => {
             twitter,
             github
         }
+
         storeUserAnswers(answers)
+
         return answers
     }
 

@@ -28,7 +28,7 @@
         <div class="links-form">
             <h2>Add links</h2>
             <ul>
-                <li v-for="(link,i) of links">
+                <li v-for="(link,i) of links" :key="`link-${i}`">
                     <input :keyup="saveAll()" placeholder="Label" class="label" type="text" v-model="links[i].label">
                     <input :keyup="saveAll()" placeholder="Link" type="text" v-model="links[i].link">
                     <button class="btn btn-danger" @click="deleteLine(i)">
@@ -48,102 +48,99 @@
 
 <script>
 
-    import env from 'env'
 import { isArray } from 'util';
 
-    export default {
-        name: 'admin',
-        data() {
-            return {
-                links: [],
-                color: '',
-                password: localStorage.getItem('password'),
-            }
-        },
-        mounted() {
-            if (!this.password) {
-                this.$router.push('login')
-            }
-            else {
-                fetch(`${env.api}/links?password=${this.password}`)
-                    .then(resp => resp.json())
-                    .then(data => this.validLinks(data))
-                    .then(data => this.links = data)
-                    .catch(e => {
-                        console.log(e)
-                    })
+export default {
+  name: 'admin',
+  data() {
+    return {
+      links: [],
+      color: '',
+      password: localStorage.getItem('password'),
+    };
+  },
+  mounted() {
+    if (!this.password) {
+      this.$router.push('login');
+    } else {
+      fetch(`${process.env.VUE_APP_API_URL}/links?password=${this.password}`)
+        .then(resp => resp.json())
+        .then(data => this.validLinks(data))
+        .then((data) => {
+          this.links = data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
 
-                fetch(env.api + '/infos')
-                    .then(resp => resp.json())
-                    .then(data => {
-                        this.color = data.color
-                    })
-                    .catch(() => {
-                    })
-            }
-        },
-        sockets: {
-            links(links) {
-                this.links = links
-            },
-        },
-        methods: {
-
-            validLinks(links) {
-                console.log(links);
-                if(isArray(links) && links.length === 0) return links;
-                else if (isArray(links) && links.length !== 0) {
-                    if(typeof links[0]  === "object" && links[0].link != undefined) {
-                        return links;
-                    }else{
-                        throw new Error('Invalid format in links.json file')
-                    }
-                }else {
-                    throw new Error('Invalid format in links.json file')
-                }
-            },
-
-            openFolder() {
-                fetch(`${env.api}/openFolder?password=${this.password}`)
-                    .catch(() => {
-                    })
-            },
-
-            changeColor() {
-                this.$http.post(`${env.api}/color?password=${this.password}`, {color: this.color})
-                    .catch(e => {
-                        if (e.status === 401) {
-                            console.log('💩')
-                            localStorage.removeItem('password')
-                            this.$router.push('login')
-                        }
-                    })
-            },
-            logout() {
-                console.log('💩')
-                localStorage.removeItem('password')
-                this.$router.push('/')
-            },
-            addLine() {
-                this.links.push({label:'',link:''});
-            },
-            deleteLine(index) {
-                this.links.splice(index, 1)
-            },
-            saveAll() {
-                this.$http.post(`${env.api}/links?password=${this.password}`, this.links)
-                    .catch(e => {
-                        if (e.status === 401) {
-                            console.log('💩')
-                            localStorage.removeItem('password')
-                            this.$router.push('login')
-                        }
-                    })
-            },
-        },
-        sockets: {
-        },
+      fetch(`${process.env.VUE_APP_API_URL}/infos`)
+        .then(resp => resp.json())
+        .then((data) => {
+          this.color = data.color;
+        })
+        .catch(() => {
+        });
     }
+  },
+  sockets: {
+    links(links) {
+      this.links = links;
+    },
+  },
+  methods: {
+
+    validLinks(links) {
+      console.log(links);
+      if (isArray(links) && links.length === 0) return links;
+      if (isArray(links) && links.length !== 0) {
+        if (typeof links[0] === 'object' && links[0].link !== undefined) {
+          return links;
+        }
+        throw new Error('Invalid format in links.json file');
+      } else {
+        throw new Error('Invalid format in links.json file');
+      }
+    },
+
+    openFolder() {
+      fetch(`${process.env.VUE_APP_API_URL}/openFolder?password=${this.password}`)
+        .catch(() => {
+        });
+    },
+
+    changeColor() {
+      this.$http.post(`${process.env.VUE_APP_API_URL}/color?password=${this.password}`, { color: this.color })
+        .catch((e) => {
+          if (e.status === 401) {
+            console.log('💩');
+            localStorage.removeItem('password');
+            this.$router.push('login');
+          }
+        });
+    },
+    logout() {
+      console.log('💩');
+      localStorage.removeItem('password');
+      this.$router.push('/');
+    },
+    addLine() {
+      this.links.push({ label: '', link: '' });
+    },
+    deleteLine(index) {
+      this.links.splice(index, 1);
+    },
+    saveAll() {
+      this.$http.post(`${process.env.VUE_APP_API_URL}/links?password=${this.password}`, this.links)
+        .catch((e) => {
+          if (e.status === 401) {
+            console.log('💩');
+            localStorage.removeItem('password');
+            this.$router.push('login');
+          }
+        });
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">

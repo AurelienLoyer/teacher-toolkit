@@ -1,17 +1,21 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+import Home from './components/Home.vue';
+import Login from './components/Login.vue';
+import Admin from './components/Admin.vue';
+
+Vue.use(VueRouter);
 
 const routes = [
-  {path: '/', component: require('./components/Home.vue')},
-  {path: '/login', component: require('./components/Login.vue')},
-  {path: '/admin', component: require('./components/Admin.vue')},
-]
+  { path: '/', component: Home },
+  { path: '/login', component: Login },
+  { path: '/admin', component: Admin },
+];
 
 const router = new VueRouter({
   mode: 'hash',
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;

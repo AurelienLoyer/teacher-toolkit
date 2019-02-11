@@ -20,41 +20,40 @@
 
 <script>
 
-  import env from 'env'
-  import Loader from './Loader.vue'
-  import Error from './Error.vue'
+import Loader from './Loader.vue';
+import Error from './Error.vue';
 
-  export default {
-    name: 'links',
-    data() {
-      return {
-        isLoading: true,
-        isError: false,
-        links: [],
-      }
+export default {
+  name: 'links',
+  data() {
+    return {
+      isLoading: true,
+      isError: false,
+      links: [],
+    };
+  },
+  components: {
+    'v-loader': Loader,
+    'v-error': Error,
+  },
+  mounted() {
+    fetch(`${process.env.VUE_APP_API_URL}/links`)
+      .then(resp => resp.json())
+      .then((data) => {
+        this.links = data;
+        this.isLoading = false;
+      })
+      .catch(() => {
+        this.isLoading = false;
+        this.isError = true;
+      });
+  },
+  sockets: {
+    links(links) {
+      this.links = links;
     },
-    components: {
-      'v-loader': Loader,
-      'v-error': Error,
-    },
-    mounted() {
-      fetch(`${env.api}/links`)
-        .then(resp => resp.json())
-        .then(data => {
-          this.links = data
-          this.isLoading = false
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.isError = true;
-        })
-    },
-    sockets: {
-      links: function (links) {
-        this.links = links
-      }
-    },
-  }
+  },
+};
 </script>
 
 <style lang="scss" scoped>

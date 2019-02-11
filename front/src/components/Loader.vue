@@ -1,16 +1,16 @@
 <template>
     <div class="loader">
-        <img src="src/assets/loader.gif" alt="">
+        <img src="/assets/loader.gif" alt="">
         <strong>Loading {{type}}...</strong>
     </div>
 </template>
 
 <script>
-    export default {
-        props: [
-            'type',
-        ],
-    }
+export default {
+  props: [
+    'type',
+  ],
+};
 </script>
 
 <style lang="scss" scoped>

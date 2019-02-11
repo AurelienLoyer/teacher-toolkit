@@ -5,55 +5,54 @@
     <v-loader :type="'files'" v-if="isLoading"></v-loader>
 
     <v-error v-else-if="isError"></v-error>
-    
+
     <ul v-else>
-      <li v-for="file in files">
+      <li v-for="(file, index) in files" :key="`file-${index}`">
         <v-file :file="file"></v-file>
-      </li>  
+      </li>
     </ul>
-  
+
   </div>
 </template>
 
 <script>
-  import env from 'env'
-  import File from './File.vue'
-  import Error from './Error.vue'
-  import Loader from './Loader.vue'
- 
-  export default {
-    name: 'files',
-    components: {
-      'v-file': File,
-      'v-loader': Loader,
-      'v-error': Error,
+import File from './File.vue';
+import Error from './Error.vue';
+import Loader from './Loader.vue';
+
+export default {
+  name: 'files',
+  components: {
+    'v-file': File,
+    'v-loader': Loader,
+    'v-error': Error,
+  },
+  data() {
+    return {
+      isLoading: true,
+      isError: false,
+      files: [],
+      msg: 'Welcome to Your Vue.js App',
+    };
+  },
+  mounted() {
+    fetch(`${process.env.VUE_APP_API_URL}/files`)
+      .then(resp => resp.json())
+      .then((data) => {
+        this.files = data;
+        this.isLoading = false;
+      })
+      .catch(() => {
+        this.isLoading = false;
+        this.isError = true;
+      });
+  },
+  sockets: {
+    files(files) {
+      this.files = files;
     },
-    data() {
-      return {
-        isLoading: true,
-        isError: false,
-        files: [],
-        msg: 'Welcome to Your Vue.js App'
-      }
-    },
-    mounted() {
-      fetch(`${env.api}/files`)
-        .then(resp => resp.json())
-        .then(data => {
-            this.files = data
-            this.isLoading = false;
-        })
-        .catch(() => {
-          this.isLoading = false;
-          this.isError = true;
-        })
-    },
-    sockets: {
-      files: function (files) {
-        this.files = files
-      }
-    },
-  }
+  },
+};
 </script>
 
 <style lang="scss" scoped>

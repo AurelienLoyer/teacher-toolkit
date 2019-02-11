@@ -20,38 +20,36 @@
 
 <script>
 
-    import env from 'env'
+export default {
+  name: 'login',
+  data() {
+    return {
+      password: '',
+    };
+  },
+  mounted() {
 
-    export default {
-        name: 'login',
-        data() {
-            return {
-                password: '',
-            }
-        },
-        mounted() {
+  },
+  sockets: {
 
-        },
-        sockets: {
-
-        },
-        methods: {
-            log() {
-                if (this.password) {
-                    this.$http.post(`${env.api}/password`, { 'password': this.password })
-                        .then(res => {
-                            console.log(res)
-                            localStorage.setItem('password', this.password)
-                            this.$router.push('admin')
-                        })
-                        .catch(e => {
-                            this.password = ''
-                            console.log(`${e.status} 💩`)
-                        })
-                }
-            },
-        },
-    }
+  },
+  methods: {
+    log() {
+      if (this.password) {
+        this.$http.post(`${process.env.VUE_APP_API_URL}/password`, { password: this.password })
+          .then((res) => {
+            console.log(res);
+            localStorage.setItem('password', this.password);
+            this.$router.push('admin');
+          })
+          .catch((e) => {
+            this.password = '';
+            console.log(`${e.status} 💩`);
+          });
+      }
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -61,7 +59,7 @@
         margin: 0px;
         padding: 10px;
         text-transform: uppercase;
-        
+
         .back-btn {
             color: black;
             float: left;

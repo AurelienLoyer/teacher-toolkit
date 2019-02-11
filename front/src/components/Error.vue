@@ -1,6 +1,6 @@
 <template>
     <div class="error">
-        <img src="src/assets/error.png" alt="">
+        <img src="/assets/error.png" alt="">
         <strong>Server error :'(</strong>
     </div>
 </template>
